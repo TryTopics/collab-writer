@@ -85,6 +85,7 @@ function _startServer(cb) {
 
 function _whenRunning() {
   console.info('Listening on http://' + cfg.getHost() + ':' + httpServer.address().port)
+  console.info('REST API at http://' + cfg.getHost() + ':' + httpServer.address().port + '/api/documents/ (append for example the sample ID "example-doc")')
 }
 
 series([_runSeed, _startServer], _whenRunning)

@@ -7,7 +7,6 @@ STATUS: Experimental
 ## Install
 
 ```
-$ git clone https://github.com/substance/examples.git
 $ npm install
 $ npm run build
 $ npm start
@@ -34,4 +33,16 @@ We recommend that you start the server with a visual debugger, such as devtool.
 
 ```js
 $ devtool server.cjs.js
+```
+
+Or directly in Chrome, using the URI you get from
+
+```js
+$ node --inspect server.cjs.js
+```
+
+With the current package.json we install doctype-sample from [git](https://github.com/TryTopics/doctype-sample). Symlink to workspace like so:
+
+```
+cd .. && ln -s collab-writer/node_modules/substance-simple-writer doctype-sample && cd collab-writer
 ```
