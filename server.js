@@ -42,7 +42,9 @@ collabServer.bind(wss)
 /*
   Serve static files (e.g. the SimpleWriter client)
 */
-app.use('/', express.static(path.join(__dirname, '/dist')))
+app.get('/', (req, res) => res.redirect('/author/'));
+app.get('/author/', (req, res) => res.redirect('/author/example-doc'));
+app.use('/author/:id', express.static(path.join(__dirname, '/dist')));
 
 /*
   Error handling
@@ -85,7 +87,7 @@ function _startServer(cb) {
 
 function _whenRunning() {
   console.info('Listening on http://' + cfg.getHost() + ':' + httpServer.address().port)
-  console.info('REST API at http://' + cfg.getHost() + ':' + httpServer.address().port + '/api/documents/ (append for example the sample ID "example-doc")')
+  console.info('REST API at http://' + cfg.getHost() + ':' + httpServer.address().port + '/api/documents/')
 }
 
 series([_runSeed, _startServer], _whenRunning)
