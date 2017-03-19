@@ -5,6 +5,8 @@ import http from 'http'
 import { Server as WebSocketServer } from 'ws'
 import seed from './seed'
 
+import xmlCompatibility from './xml-compatibility';
+
 /*
   CollabServerPackage provides an in-memory backend for testing purposes.
   For real applications, please provide a custom package here, which configures
@@ -28,6 +30,7 @@ let wss = new WebSocketServer({ server: httpServer })
 var documentServer = new DocumentServer({
   configurator: cfg
 })
+xmlCompatibility.patchDocumentServer(documentServer);
 documentServer.bind(app)
 
 /*
@@ -79,6 +82,7 @@ function _runSeed(cb) {
   let changeStore = cfg.getChangeStore()
   let snapshotStore = cfg.getSnapshotStore()
   seed(changeStore, snapshotStore, cb)
+
 }
 
 function _startServer(cb) {
