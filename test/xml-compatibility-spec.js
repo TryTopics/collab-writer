@@ -13,14 +13,15 @@ describe("patchDocumentServer", function() {
     }
   };
 
-  it("Responds using json by default", function(done) {
-    const params = {
-      configurator: {
-        getDocumentEngine: function() {
-          return new MockDocumentEngine();
-        }
+  const params = {
+    configurator: {
+      getDocumentEngine: function() {
+        return new MockDocumentEngine();
       }
-    };
+    }
+  };
+
+  it("Responds using json by default", function(done) {
     const server = new DocumentServer(params);
     xmlCompatibility.patchDocumentServer(server);
     server._getDocument({
@@ -29,18 +30,14 @@ describe("patchDocumentServer", function() {
       json: json => {
         console.log('Got json', json);
         done();
+      },
+      format: formatCb => {
+        formatCb.default();
       }
     })
   });
 
   it("Responds using XML if such an Accept header is present", function(done) {
-    const params = {
-      configurator: {
-        getDocumentEngine: function() {
-          return new MockDocumentEngine();
-        }
-      }
-    };
     const server = new DocumentServer(params);
     xmlCompatibility.patchDocumentServer(server);
     server._getDocument({
@@ -51,6 +48,5 @@ describe("patchDocumentServer", function() {
       }
     })
   });
-
 
 });
