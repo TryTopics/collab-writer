@@ -5,7 +5,7 @@ import http from 'http'
 import { Server as WebSocketServer } from 'ws'
 import seed from './seed'
 
-import xmlCompatibility from './xml-compatibility';
+const xmlCompatibility = require('./xml-compatibility');
 
 /*
   CollabServerPackage provides an in-memory backend for testing purposes.

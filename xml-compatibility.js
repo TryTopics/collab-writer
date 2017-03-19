@@ -1,5 +1,7 @@
 
-import { Configurator, HTMLImporter, HTMLExporter } from 'substance';
+const Configurator = require('substance').Configurator;
+const HTMLImporter = require('substance').HTMLImporter;
+const HTMLExporter = require('substance').HTMLExporter;
 
 if (typeof HTMLImporter !== 'function') {
   throw new Error('Importer is a: ' + typeof HTMLImporter);
@@ -21,29 +23,24 @@ const formats = {
   html: cfg.createExporter('html', {})
 };
 
-//module.exports = {
-export default {
+module.exports.patchDocumentServer = function(documentServer) {
 
-  patchDocumentServer: function(documentServer) {
+  const _getDocument = documentServer._getDocument;
+  if (!_getDocument) throw new Error('Not the expected DocumentServer?');
 
-    const _getDocument = documentServer._getDocument;
-    if (!_getDocument) throw new Error('Not the expected DocumentServer?');
+  documentServer._getDocument = function(req, res, next) {
+    res.format({
+      html: function () {
+        _getDocument.call(documentServer, req, {
+          json: function(json) {
+            res.header('Content-Type', 'text/html');
+            formats.html.exportDocument(json);
+          }
+        });
+      },
+      json: _getDocument.bind(documentServer),
+      default: _getDocument.bind(documentServer)
+    })
+  };
 
-    documentServer._getDocument = function(req, res, next) {
-      res.format({
-        html: function () {
-          _getDocument.call(documentServer, req, {
-            json: function(json) {
-              res.header('Content-Type', 'text/html');
-              formats.html.exportDocument(json);
-            }
-          });
-        },
-        json: _getDocument.bind(documentServer),
-        default: _getDocument.bind(documentServer)
-      })
-    };
-
-  }
-
-};
+}
