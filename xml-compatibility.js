@@ -1,13 +1,27 @@
 
-const formats = {
-  xml: undefined,
-  html: undefined
-};
+const Configurator = require('substance').Configurator;
+const HTMLImporter = require('substance').HTMLImporter;
+const HTMLExporter = require('substance').HTMLExporter;
 
-module.exports.configure = function(substanceCfg) {
-  formats.xml = substanceCfg.createImporter('xml');
-  formats.html = substanceCfg.createImporter('html');
+if (typeof HTMLImporter !== 'function') {
+  throw new Error('Importer is a: ' + typeof HTMLImporter);
 }
+if (typeof HTMLExporter !== 'function') {
+  throw new Error('Exporter is a: ' + typeof HTMLExporter);
+}
+
+// CollabServerConfigurator isn't a Configurator
+// but we do want this feature server side instead of client side
+let cfg = new Configurator();
+cfg.addImporter('html', HTMLImporter);
+//cfg.addImporter('xml', XMLImporter);
+cfg.addExporter('html', HTMLExporter);
+//cfg.addExporter('xml', XMLExporter);
+
+const formats = {
+  xml: cfg.createExporter('xml', {}),
+  html: cfg.createExporter('html', {})
+};
 
 module.exports.patchDocumentServer = function(documentServer) {
 
