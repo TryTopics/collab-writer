@@ -5,6 +5,7 @@ import http from 'http'
 import { Server as WebSocketServer } from 'ws'
 import seed from './seed'
 
+import { HTMLImporter, HTMLExporter } from 'substance';
 const xmlCompatibility = require('./xml-compatibility');
 
 /*
@@ -16,6 +17,12 @@ let cfg = new CollabServerConfigurator()
 cfg.import(CollabServerPackage)
 cfg.setHost(process.env.HOST || 'localhost')
 cfg.setPort(process.env.PORT || 7777)
+
+cfg.addImporter('html', HTMLImporter)
+//cfg.addImporter('xml', TestXMLImporter)
+cfg.addExporter('html', HTMLExporter)
+//cfg.addExporter('xml', TestXMLExporter)
+xmlCompatibility.configure(cfg);
 
 /*
   Setup Express, HTTP and Websocket Server
@@ -82,6 +89,7 @@ function _runSeed(cb) {
   let changeStore = cfg.getChangeStore()
   let snapshotStore = cfg.getSnapshotStore()
   seed(changeStore, snapshotStore, cb)
+
 }
 
 function _startServer(cb) {
