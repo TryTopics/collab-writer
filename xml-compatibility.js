@@ -17,7 +17,7 @@ cfg.addExporter('html', HTMLExporter);
 //cfg.addExporter('xml', XMLExporter);
 
 const formats = {
-  xml: cfg.createExporter('xml', {}),
+  //xml: cfg.createExporter('xml', {}),
   html: cfg.createExporter('html', {})
 };
 
